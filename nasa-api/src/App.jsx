@@ -3,12 +3,16 @@ import './App.css'
 
 function App() {
 
-  const [image, setImage] = useState('')
-  const [explanation, setExplanation] = useState('')
+
   const [savedDate, setSavedDate] = useState('')
   const [selectedImage, setSelectedImage] = useState('')
+  const [imageDate, setImageDate] = useState('')
   const [selectedText, setSelectedText] = useState('')
-  const [yesterday, setYesterday] = useState(1)
+  const [counter, setCounter] = useState(0)
+
+/*   useEffect(() => {
+    getAnyDay
+  }, []) */
 
   /*   useEffect(() => {
   
@@ -30,14 +34,17 @@ function App() {
   
     }, []) */
 
+
   const date = savedDate
   const getAnyDay = () => {
     const NASA_KEY = import.meta.env.VITE_NASA_API_KEY
     const url = `https://api.nasa.gov/planetary/apod?api_key=${NASA_KEY}&date=${date}&`;
-    fetch(url).then(response => response.json())
+    fetch(url)
+      .then(response => response.json())
       .then(data => {
         setSelectedImage(data.hdurl)
         setSelectedText(data.explanation)
+        setImageDate(data.date)
         /* console.log('cierta fecha', data); */ // Muestra los datos en la consola
       })
       .catch(error => {
@@ -46,48 +53,52 @@ function App() {
   }
 
   useEffect(() => {
-    getAnyDay()
-  }, [savedDate])
+      getAnyDay();
+  }, [savedDate]);
 
-
-
-
-
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() - yesterday);
-  //formatear fecha
-  const formattedDate = tomorrow.getFullYear() + "-" +
-    String(tomorrow.getMonth() + 1).padStart(2, '0') + "-" +
-    String(tomorrow.getDate()).padStart(2, '0');
-  console.log(savedDate);
+  /*  const today = new Date();
+   const tomorrow = new Date(today);
+   tomorrow.setDate(today.getDate() - counter);
+   
+   //formatear fecha
+   const formattedDate = tomorrow.getFullYear() + "-" +
+     String(tomorrow.getMonth() + 1).padStart(2, '0') + "-" +
+     String(tomorrow.getDate()).padStart(2, '0');
+   console.log(savedDate); */
 
   const handleClickBack = () => {
+    const today = new Date()
+    // Calcula la fecha retrocediendo con base en el contador
+    today.setDate(today.getDate() - (counter + 1))
+    const formattedDate = today.toISOString().split('T')[0]
     setSavedDate(formattedDate)
-    setYesterday(yesterday + 1)
+    setCounter(prevCounter => prevCounter + 1)  // Actualiza el contador después
   }
 
   const handleClickNext = () => {
+    const today = new Date()
+    // Calcula la fecha avanzando con base en el contador
+    today.setDate(today.getDate() - (counter - 1))
+    const formattedDate = today.toISOString().split('T')[0]
     setSavedDate(formattedDate)
-    setYesterday(yesterday - 1)
+    setCounter(prevCounter => prevCounter - 1)  // Actualiza el contador después
   }
 
+  const todayDate = new Date().toISOString().split('T')[0];
 
 
   return (
     <>
       <h1>Astronomy picture of the Day</h1>
-      {/*      <div className='daily-image-container'>
-        <img className='daily-image' src={image}></img>
-        <p className='explanation'>{explanation}</p>
-      </div> */}
+
       <div className='daily-image-container'>
         <img className='daily-image' src={selectedImage}></img>
+        <p className='explanation'>{imageDate}</p>
         <p className='explanation'>{selectedText}</p>
       </div>
       <div className='back-next'>
         <button onClick={handleClickBack}>Back</button>
-       { yesterday >= 1 &&<button onClick={handleClickNext}>Next</button>}
+        {imageDate!=todayDate&&<button onClick={handleClickNext}>Next</button>}
       </div>
     </>
   )
