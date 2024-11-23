@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import Footer from './components/footer'
 
 function App() {
 
@@ -92,7 +93,11 @@ function App() {
       <h1>Astronomy picture of the Day</h1>
 
       <div className='daily-image-container'>
-        <img className='daily-image' src={selectedImage}></img>
+      <a href={selectedImage} target='_blank'>
+
+
+        <img className='daily-image' src={selectedImage }></img>
+      </a>
         <p className='explanation'>{imageDate}</p>
         <p className='explanation'>{selectedText}</p>
       </div>
@@ -100,6 +105,7 @@ function App() {
         <button onClick={handleClickBack}>Back</button>
         {imageDate!=todayDate&&<button onClick={handleClickNext}>Next</button>}
       </div>
+     <Footer></Footer>
     </>
   )
 }
