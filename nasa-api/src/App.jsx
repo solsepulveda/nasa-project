@@ -89,24 +89,21 @@ function App() {
 
 
   return (
-    <>
+    <div className='.container'>
       <h1>Astronomy picture of the Day</h1>
 
       <div className='daily-image-container'>
-      <a href={selectedImage} target='_blank'>
-
-
+      <a className='daily-image' href={selectedImage} target='_blank'>
         <img className='daily-image' src={selectedImage }></img>
       </a>
-        <p className='explanation'>{imageDate}</p>
-        <p className='explanation'>{selectedText}</p>
+        <p className='explanation'>{imageDate} <br/>{selectedText}</p>
       </div>
       <div className='back-next'>
         <button onClick={handleClickBack}>Back</button>
         {imageDate!=todayDate&&<button onClick={handleClickNext}>Next</button>}
       </div>
      <Footer></Footer>
-    </>
+     </div>
   )
 }
 
