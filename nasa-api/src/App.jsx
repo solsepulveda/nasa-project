@@ -10,10 +10,12 @@ function App() {
   const [imageDate, setImageDate] = useState('')
   const [selectedText, setSelectedText] = useState('')
   const [counter, setCounter] = useState(0)
+  const [video, setVideo]=useState('')
+  const [type, setType] =useState('')
 
-/*   useEffect(() => {
-    getAnyDay
-  }, []) */
+  /*   useEffect(() => {
+      getAnyDay
+    }, []) */
 
   /*   useEffect(() => {
   
@@ -46,6 +48,8 @@ function App() {
         setSelectedImage(data.hdurl)
         setSelectedText(data.explanation)
         setImageDate(data.date)
+        setVideo(data.url)
+        setType(data.media_type)
         /* console.log('cierta fecha', data); */ // Muestra los datos en la consola
       })
       .catch(error => {
@@ -54,7 +58,8 @@ function App() {
   }
 
   useEffect(() => {
-      getAnyDay();
+    getAnyDay();
+    console.log('video',video)
   }, [savedDate]);
 
   /*  const today = new Date();
@@ -89,21 +94,24 @@ function App() {
 
 
   return (
-    <div className='.container'>
+    <div className='container'>
       <h1>Astronomy picture of the Day</h1>
 
       <div className='daily-image-container'>
-      <a className='daily-image' href={selectedImage} target='_blank'>
-        <img className='daily-image' src={selectedImage }></img>
-      </a>
-        <p className='explanation'>{imageDate} <br/>{selectedText}</p>
+       { type=='image'?(<a className='daily-image' href={selectedImage} target='_blank'>
+          <img className='daily-image' src={selectedImage}></img>
+        </a>):
+        <iframe className='daily-image' width="560" height="315" src={video} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      }
+
+        <p className='explanation'>{imageDate} <br />{selectedText}</p>
       </div>
       <div className='back-next'>
         <button onClick={handleClickBack}>Back</button>
-        {imageDate!=todayDate&&<button onClick={handleClickNext}>Next</button>}
+        {imageDate != todayDate && <button onClick={handleClickNext}>Next</button>}
       </div>
-     <Footer></Footer>
-     </div>
+      <Footer></Footer>
+    </div>
   )
 }
 
